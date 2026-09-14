@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MoJi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body data-page="question">
+
+  <div class="ambient" aria-hidden="true"></div>
+
+  <video id="celebrateVideo" class="celebrate-bg" src="pic/vilove1.mp4" muted loop playsinline></video>
+  <div class="celebrate-scrim" id="celebrateScrim"></div>
+
+  <canvas id="confetti"></canvas>
+
+  <div class="app">
+    <section class="stage question-stage" data-stage="question">
+      <div class="heart-frame">
+        <svg viewBox="0 0 32 29">
+          <path
+            d="M16 29C7 22.5 0 16.8 0 9.6 0 4.3 4.2 0 9.4 0c3 0 5.6 1.5 6.6 3.8C17 1.5 19.6 0 22.6 0 27.8 0 32 4.3 32 9.6 32 16.8 25 22.5 16 29z" />
+        </svg>
+      </div>
+      <h2 id="questionText">เป็นแฟนกันไหม</h2>
+
+      <div class="qa-buttons" id="qaButtons">
+        <button class="btn btn-yes" id="btnYes">เป็น</button>
+        <button class="btn btn-no" id="btnNo">ไม่เป็น</button>
+      </div>
+
+      <div class="celebrate" id="celebrate">
+        <p>ยินดีด้วยนะ วันนี้เป็นวันที่ดีที่สุดวันหนึ่งของฉันเลย</p>
+      </div>
+    </section>
+  </div>
+
+  <div class="pagenav">
+    <a href="photos.html"><svg viewBox="0 0 24 24">
+        <path d="M15 4l-8 8 8 8V4z" />
+      </svg></a>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
