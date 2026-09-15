@@ -249,6 +249,16 @@ body[data-page="question"]{ padding: 0; height: 100vh; overflow: hidden; }
   border-radius: 18px;
   border: 1px solid var(--line);
   overflow: hidden;
+}
+/* .photo-front's only children are absolutely positioned (the <img> and
+   the caption strip) — it doesn't need to be a flex container at all.
+   Some mobile browsers still let a flex parent's align-items/justify-content
+   nudge an absolutely-positioned child even with inset:0 set on all sides,
+   which is what was squeezing the photo into a smaller centered box with
+   empty gaps top and bottom instead of filling the card. Keeping .photo-front
+   out of flex entirely avoids that. The centered flex/text layout only
+   belongs on .photo-back, which really does hold plain centered text. */
+.photo-back{
   display: flex; align-items: center; justify-content: center;
   flex-direction: column; gap: 10px;
   padding: 14px; text-align: center;
