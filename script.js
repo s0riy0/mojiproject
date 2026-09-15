@@ -17,17 +17,12 @@
     }
   }
 
-  // ---- loader (index.html only): 5s then go to videos.html ----
-  var loader = document.getElementById('loader');
-  if(loader){
-    var loaderMs = reduceMotion ? 0 : 5000;
-    setTimeout(function(){
-      loader.classList.add('hide');
-      setTimeout(function(){ window.location.href = 'videos.html'; }, reduceMotion ? 0 : 550);
-    }, loaderMs);
-  }
+  // filled in below by the reel block, if this page has one — lets the
+  // loader (index.html) turn sound on for the video already playing
+  // underneath it, the moment the visitor taps to open.
+  var unlockReelSound = function(){};
 
-  // ---- fullscreen video reel (videos.html): 1 clip fills the screen, swipe left/right for the next ----
+  // ---- fullscreen video reel (index.html's opening reel, and videos.html): 1 clip fills the screen, swipe left/right for the next ----
   var reelsViewport = document.getElementById('videoTrack');
   var reelsTrack = document.getElementById('reelsTrack');
   if(reelsViewport && reelsTrack){
@@ -54,11 +49,38 @@
 
     dots.forEach(function(d, i){ d.addEventListener('click', function(){ goTo(i); }); });
 
-    // tap a slide: toggle play/pause once a real <video> is added
+    // videos start muted so mobile browsers allow them to autoplay.
+    // unlockReelSound() turns sound on for the active clip (and makes sure
+    // it's playing) without touching play/pause otherwise — called from
+    // the loader tap on index.html, or from the first tap on the video
+    // itself when this page is reached directly (no loader, e.g. videos.html
+    // via the back arrow from photos.html).
+    var soundOn = false;
+    unlockReelSound = function(){
+      if(soundOn) return;
+      soundOn = true;
+      var v = slides[active] && slides[active].querySelector('video');
+      if(!v) return;
+      v.muted = false;
+      // it's usually been playing silently for a few seconds already
+      // (behind the loading screen, or before the visitor got to it) —
+      // restart from the top so the sound and picture feel in sync
+      // the moment it's unlocked, instead of picking up mid-clip.
+      v.currentTime = 0;
+      var p = v.play();
+      if(p && p.catch) p.catch(function(){});
+    };
+
+    // tap a slide: first tap just turns sound on (see above) and does NOT
+    // also toggle pause — otherwise the video would unmute and immediately
+    // pause on that same tap, going silent again. Every tap after that
+    // toggles play/pause as normal.
     slides.forEach(function(slide){
       slide.addEventListener('click', function(){
         var v = slide.querySelector('video');
-        if(v){ v.paused ? v.play() : v.pause(); }
+        if(!v) return;
+        if(!soundOn){ unlockReelSound(); return; }
+        v.paused ? v.play() : v.pause();
       });
     });
 
@@ -82,6 +104,25 @@
     });
 
     layout();
+  }
+
+  // ---- loader (index.html): tap the heart to open. The video reel above
+  // is already playing muted underneath it — this tap is what the browser
+  // needs to allow the video to play WITH sound too (mobile browsers block
+  // audio until the visitor has actually touched the page at least once,
+  // there's no way around that from code). One tap = both open + sound. ----
+  var loader = document.getElementById('loader');
+  if(loader){
+    var opened = false;
+    var openNow = function(){
+      if(opened) return;
+      opened = true;
+      if(reduceMotion){ loader.style.display = 'none'; }
+      else{ loader.classList.add('hide'); }
+      if(amb) amb.style.display = 'none';
+      unlockReelSound();
+    };
+    loader.addEventListener('click', openNow);
   }
 
   // ---- photo cards (photos.html) ----
@@ -156,7 +197,7 @@
     btnYes.addEventListener('click', function(){
       qa.style.display = 'none';
       var qText = document.getElementById('questionText');
-      if(qText) qText.textContent = 'เย้ !';
+      if(qText) qText.textContent = 'เยิบๆ !';
       var celebrate = document.getElementById('celebrate');
       if(celebrate) celebrate.classList.add('show');
       document.body.classList.add('celebrating');
@@ -164,6 +205,10 @@
       var bgVideo = document.getElementById('celebrateVideo');
       if(bgVideo){
         bgVideo.classList.add('show');
+        // this play() runs right inside the "เป็น" click, which is a real
+        // user gesture — so unlike the opening reel, this one can just
+        // unmute and play with sound directly, no unlock-on-next-tap needed.
+        bgVideo.muted = false;
         var vp = bgVideo.play();
         if(vp && vp.catch) vp.catch(function(){});
       }

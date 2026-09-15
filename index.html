@@ -8,9 +8,26 @@
   <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body data-page="videos">
 
   <div class="ambient" aria-hidden="true"></div>
+
+  <div class="reels" id="videoTrack">
+    <div class="reels-track" id="reelsTrack">
+      <div class="reel-slide" data-label="">
+        <video src="pic/vide.mp4" muted playsinline loop></video>
+      </div>
+    </div>
+  </div>
+
+  <div class="reel-bottombar">
+    <div class="reel-dots" id="videoDots"></div>
+    <div class="reel-pagenav">
+      <a class="disabled" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8V4z" /></svg></a>
+      <span></span>
+      <a href="photos.html"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8V4z" /></svg></a>
+    </div>
+  </div>
 
   <div id="loader">
     <div class="loader-inner">
@@ -20,12 +37,12 @@
             d="M16 29C7 22.5 0 16.8 0 9.6 0 4.3 4.2 0 9.4 0c3 0 5.6 1.5 6.6 3.8C17 1.5 19.6 0 22.6 0 27.8 0 32 4.3 32 9.6 32 16.8 25 22.5 16 29z" />
         </svg>
       </div>
-      <p>กำลังโหลดความรักจากผู้สร้าง<br>กรุณารอสักครู่<span class="dots-inline"></span></p>
+      <p>แตะที่หัวใจ<br>เพื่อเปิดความรักจากผู้สร้าง<span class="dots-inline"></span></p>
     </div>
   </div>
 
   <noscript>
-    <meta http-equiv="refresh" content="5;url=videos.html">
+    <meta http-equiv="refresh" content="0;url=videos.html">
   </noscript>
 
   <script src="script.js"></script>
