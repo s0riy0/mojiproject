@@ -104,6 +104,22 @@
     });
 
     layout();
+
+    // when the active clip finishes: go to the next clip, or — on the last
+    // clip — move on to the next page of the site. Clips that loop (like
+    // the one behind index.html's loader) never fire 'ended', so this only
+    // ever kicks in on a page like videos.html where the video plays once.
+    var pagenavLinks = document.querySelectorAll('.reel-pagenav a:not(.disabled)[href]');
+    var nextPageHref = pagenavLinks.length ? pagenavLinks[pagenavLinks.length - 1].getAttribute('href') : null;
+    slides.forEach(function(slide, i){
+      var video = slide.querySelector('video');
+      if(!video) return;
+      video.addEventListener('ended', function(){
+        if(i !== active) return; // stale event from an inactive clip
+        if(i < slides.length - 1){ goTo(i + 1); }
+        else if(nextPageHref){ window.location.href = nextPageHref; }
+      });
+    });
   }
 
   // ---- loader (index.html): tap the heart to open. The video reel above
